@@ -31,6 +31,8 @@ class Point:
             return
         if self.y**2 != self.x**3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
+        if self.x == other.x and self.y != other.y:
+            return __class__(None, None, self.a, self.b)
 
     def __add__(self, other):
         if (self.a != other.a or self.b != other.b):
