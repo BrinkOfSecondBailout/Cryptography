@@ -15,34 +15,24 @@ class FieldElement:
         return self.num == other.num and self.prime == other.prime
 
     def __ne__(self, other):
-        # this should be the inverse of the == operator
         return not (self == other)
 
     def __add__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot add two numbers in different Fields')
-        # self.num and other.num are the actual values
-        # self.prime is what we need to mod against
         num = (self.num + other.num) % self.prime
-        # We return an element of the same class
         return self.__class__(num, self.prime)
 
     def __sub__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot subtract two numbers in different Fields')
-        # self.num and other.num are the actual values
-        # self.prime is what we need to mod against
         num = (self.num - other.num) % self.prime
-        # We return an element of the same class
         return self.__class__(num, self.prime)
 
     def __mul__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot multiply two numbers in different Fields')
-        # self.num and other.num are the actual values
-        # self.prime is what we need to mod against
         num = (self.num * other.num) % self.prime
-        # We return an element of the same class
         return self.__class__(num, self.prime)
 
     def __pow__(self, exponent):
@@ -52,51 +42,51 @@ class FieldElement:
 
     def __truediv__(self, other):
         if self.prime != other.prime:
-            raise TypeError('Cannot divide two numbers in different Fields')
-        # self.num and other.num are the actual values
-        # self.prime is what we need to mod against
-        # use fermat's little theorem:
-        # self.num**(p-1) % p == 1
-        # this means:
-        # 1/n == pow(n, p-2, p)
-        num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
-        # We return an element of the same class
+            raise TypeError('Cannot divide two numbers in different Fields'
+        num=(self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
         return self.__class__(num, self.prime)
 
 
 class Point:
     def __init__(self, x, y, a, b):
-        self.a = a
-        self.b = b
-        self.x = x
-        self.y = y
+        self.a=a
+        self.b=b
+        self.x=x
+        self.y=y
+        # check if both x and y are None, this indicates the point is at infinity, return without further checks
         if self.x is None and self.y is None:
             return
         if self.y**2 != self.x**3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
-        if self.x == other.x and self.y != other.y:
-            return __class__(None, None, self.a, self.b)
 
     def __add__(self, other):
+        # check if the two points are on the same elliptic curve
         if (self.a != other.a or self.b != other.b):
             raise TypeError(
                 'Points {}, {} are not on the same curve'.format(self, other))
+        # check if either point is infinity, if it is, return the other point
         if self.x is None:
             return other
         if other.x is None:
             return self
+        # check if the x coordinates of self and other are different, this indicates they are not the same and are not inverses of each other, add using the elliptic curve addition formula:
         if self.x != other.x:
-            s = (other.y - self.y) / (other.x - self.x)
-            x = s**2 - self.x - other.y
-            y = s * (self.x - x) - self.y
+            s=(other.y - self.y) / (other.x - self.x)
+            x=s**2 - self.x - other.y
+            y=s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
+        # check if the two points are the same, then we use the elliptic curve doubling formula:
         if self == other:
-            s = (3 * self.x ** 2 + self.a) / (2 * self.y)
-            x = s**2 - 2 * self.x
-            y = s * (self.x - x) - self.y
+            s=(3 * self.x ** 2 + self.a) / (2 * self.y)
+            x=s**2 - 2 * self.x
+            y=s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
+        # check if the two points have the same x coordinate y have a coordinate of 0, this indicates it is a additive identity element, return the point at infinity
         if self.x == other and self.y == 0 * self.x:
             return self.__class__(None, None, self.a, self.b)
+        # check if the two points have the same x coordinate but different y, this indicates they are inverses of each other, return the point at infinity
+        if self.x == other.x and self.y != other.y:
+            return __class__(None, None, self.a, self.b)
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
@@ -105,9 +95,9 @@ class Point:
         return not (self == other)
 
 
-prime = 223
-a = FieldElement(0, prime)
-b = FieldElement(7, prime)
+prime=223
+a=FieldElement(0, prime)
+b=FieldElement(7, prime)
 
 
 def on_curve(x, y):
