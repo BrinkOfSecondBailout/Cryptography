@@ -14,11 +14,54 @@ class FieldElement:
             return False
         return self.num == other.num and self.prime == other.prime
 
+    def __ne__(self, other):
+        # this should be the inverse of the == operator
+        return not (self == other)
 
-a = FieldElement(7, 13)
-b = FieldElement(6, 13)
-print(a == b)
-print(a == a)
+    def __add__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot add two numbers in different Fields')
+        # self.num and other.num are the actual values
+        # self.prime is what we need to mod against
+        num = (self.num + other.num) % self.prime
+        # We return an element of the same class
+        return self.__class__(num, self.prime)
+
+    def __sub__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot subtract two numbers in different Fields')
+        # self.num and other.num are the actual values
+        # self.prime is what we need to mod against
+        num = (self.num - other.num) % self.prime
+        # We return an element of the same class
+        return self.__class__(num, self.prime)
+
+    def __mul__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot multiply two numbers in different Fields')
+        # self.num and other.num are the actual values
+        # self.prime is what we need to mod against
+        num = (self.num * other.num) % self.prime
+        # We return an element of the same class
+        return self.__class__(num, self.prime)
+
+    def __pow__(self, exponent):
+        n = exponent % (self.prime - 1)
+        num = pow(self.num, n, self.prime)
+        return self.__class__(num, self.prime)
+
+    def __truediv__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot divide two numbers in different Fields')
+        # self.num and other.num are the actual values
+        # self.prime is what we need to mod against
+        # use fermat's little theorem:
+        # self.num**(p-1) % p == 1
+        # this means:
+        # 1/n == pow(n, p-2, p)
+        num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
+        # We return an element of the same class
+        return self.__class__(num, self.prime)
 
 
 class Point:
@@ -42,6 +85,18 @@ class Point:
             return other
         if other.x is None:
             return self
+        if self.x != other.x:
+            s = (other.y - self.y) / (other.x - self.x)
+            x = s**2 - self.x - other.y
+            y = s * (self.x - x) - self.y
+            return self.__class__(x, y, self.a, self.b)
+        if self == other:
+            s = (3 * self.x ** 2 + self.a) / (2 * self.y)
+            x = s**2 - 2 * self.x
+            y = s * (self.x - x) - self.y
+            return self.__class__(x, y, self.a, self.b)
+        if self.x == other and self.y == 0 * self.x:
+            return self.__class__(None, None, self.a, self.b)
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
@@ -50,8 +105,13 @@ class Point:
         return not (self == other)
 
 
+prime = 223
+a = FieldElement(0, prime)
+b = FieldElement(7, prime)
+
+
 def on_curve(x, y):
-    return y**2 == x**3 + 5*x + 7
+    return y**2 == x**3 + a*x + b
 
 
-print(on_curve(5, 7))
+print(on_curve(FieldElement(192, prime), FieldElement(105, prime)))
