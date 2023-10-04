@@ -119,12 +119,11 @@ class Point:
 prime = 223
 a = FieldElement(0, prime)
 b = FieldElement(7, prime)
-x1 = FieldElement(170, prime)
-y1 = FieldElement(142, prime)
-x2 = FieldElement(60, prime)
-y2 = FieldElement(139, prime)
+x1 = FieldElement(192, prime)
+y1 = FieldElement(105, prime)
+# x2 = FieldElement(17, prime)
+# y2 = FieldElement(56, prime)
 
 p1 = Point(x1, y1, a, b)
-p2 = Point(x2, y2, a, b)
-p3 = p1 + p2
-print(p3)
+# p2 = Point(x2, y2, a, b)
+print(p1 + p1)
