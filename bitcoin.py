@@ -67,6 +67,15 @@ class Point:
         if self.y**2 != self.x**3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
 
+    def __repr__(self):
+        if self.x is None:
+            return 'Point(infinity)'
+        elif isinstance(self.x, FieldElement):
+            return 'Point({},{})_{}_{} FieldElement({})'.format(
+                self.x.num, self.y.num, self.a.num, self.b.num, self.x.prime)
+        else:
+            return 'Point({},{})_{}_{}'.format(self.x, self.y, self.a, self.b)
+
     def __add__(self, other):
         # check if the two points are on the same elliptic curve
         if (self.a != other.a or self.b != other.b):
@@ -110,10 +119,10 @@ class Point:
 prime = 223
 a = FieldElement(0, prime)
 b = FieldElement(7, prime)
-x1 = FieldElement(192, prime)
-y1 = FieldElement(105, prime)
-x2 = FieldElement(17, prime)
-y2 = FieldElement(56, prime)
+x1 = FieldElement(170, prime)
+y1 = FieldElement(142, prime)
+x2 = FieldElement(60, prime)
+y2 = FieldElement(139, prime)
 
 p1 = Point(x1, y1, a, b)
 p2 = Point(x2, y2, a, b)
