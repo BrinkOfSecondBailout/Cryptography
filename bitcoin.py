@@ -80,12 +80,12 @@ class Point:
         # check if the x coordinates of self and other are different, this indicates they are not the same and are not inverses of each other, add using the elliptic curve addition formula:
         if self.x != other.x:
             s = (other.y - self.y) / (other.x - self.x)
-            x = s**2 - self.x - other.y
+            x = s**2 - self.x - other.x
             y = s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
         # check if the two points are the same, then we use the elliptic curve doubling formula:
         if self == other:
-            s = (3 * self.x ** 2 + self.a) / (2 * self.y)
+            s = (3 * self.x**2 + self.a) / (2 * self.y)
             x = s**2 - 2 * self.x
             y = s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
@@ -112,9 +112,10 @@ a = FieldElement(0, prime)
 b = FieldElement(7, prime)
 x1 = FieldElement(192, prime)
 y1 = FieldElement(105, prime)
-x2 = FieldElement(42, prime)
-y2 = FieldElement(99, prime)
+x2 = FieldElement(17, prime)
+y2 = FieldElement(56, prime)
 
 p1 = Point(x1, y1, a, b)
 p2 = Point(x2, y2, a, b)
-print(p1 + p2)
+p3 = p1 + p2
+print(p3)
