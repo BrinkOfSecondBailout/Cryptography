@@ -103,13 +103,18 @@ class Point:
         return not (self == other)
 
 
+# def on_curve(x, y):
+#     return y**2 == x**3 + a*x + b
+
+
 prime = 223
 a = FieldElement(0, prime)
 b = FieldElement(7, prime)
+x1 = FieldElement(192, prime)
+y1 = FieldElement(105, prime)
+x2 = FieldElement(42, prime)
+y2 = FieldElement(99, prime)
 
-
-def on_curve(x, y):
-    return y**2 == x**3 + a*x + b
-
-
-print(on_curve(FieldElement(192, prime), FieldElement(105, prime)))
+p1 = Point(x1, y1, a, b)
+p2 = Point(x2, y2, a, b)
+print(p1 + p2)
