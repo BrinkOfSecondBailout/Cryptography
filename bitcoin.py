@@ -130,14 +130,22 @@ class Point:
 prime = 223
 a = FieldElement(0, prime)
 b = FieldElement(7, prime)
-x1 = FieldElement(192, prime)
-y1 = FieldElement(105, prime)
-# x2 = FieldElement(17, prime)
-# y2 = FieldElement(56, prime)
-
+x1 = FieldElement(15, prime)
+y1 = FieldElement(86, prime)
 
 p1 = Point(x1, y1, a, b)
 
-print(p1 + p1)
+times = 7
 
-# p2 = Point(x2, y2, a, b)
+
+def scalar_mul(x, y, times):
+    for s in range(1, times):
+        result = s * p1
+        print('{}*(x,y) = ({}, {})'.format(s, result.x.num, result.y.num))
+
+
+def find_order(point, times):
+    print(times * point)
+
+
+find_order(p1, times)
