@@ -54,6 +54,10 @@ class FieldElement:
         num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
         return self.__class__(num, self.prime)
 
+    def __rmul__(self, coefficient):
+        num = (self.num * coefficient) % self.prime
+        return self.__class__(num=num, prime=self.prime)
+
 
 class Point:
     def __init__(self, x, y, a, b):
@@ -66,6 +70,17 @@ class Point:
             return
         if self.y**2 != self.x**3 + a * x + b:
             raise ValueError('({}, {}) is not on the curve'.format(x, y))
+
+    def __rmul__(self, coefficient):
+        coef = coefficient
+        current = self
+        result = self.__class__(None, None, self.a, self.b)
+        while coef:
+            if coef & 1:
+                result += current
+            current += current
+            coef >>= 1
+        return result
 
     def __repr__(self):
         if self.x is None:
@@ -92,28 +107,24 @@ class Point:
             x = s**2 - self.x - other.x
             y = s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
+        # check if the two points have the same x coordinate but different y, this indicates they are inverses of each other, return the point at infinity
+        if self.x == other.x and self.y != other.y:
+            return self.__class__(None, None, self.a, self.b)
+        # check if the two points have the same x coordinate y have a coordinate of 0, this indicates it is a additive identity element, return the point at infinity
+        if self == other and self.y == 0 * self.x:
+            return self.__class__(None, None, self.a, self.b)
         # check if the two points are the same, then we use the elliptic curve doubling formula:
         if self == other:
             s = (3 * self.x**2 + self.a) / (2 * self.y)
             x = s**2 - 2 * self.x
             y = s * (self.x - x) - self.y
             return self.__class__(x, y, self.a, self.b)
-        # check if the two points have the same x coordinate y have a coordinate of 0, this indicates it is a additive identity element, return the point at infinity
-        if self.x == other and self.y == 0 * self.x:
-            return self.__class__(None, None, self.a, self.b)
-        # check if the two points have the same x coordinate but different y, this indicates they are inverses of each other, return the point at infinity
-        if self.x == other.x and self.y != other.y:
-            return __class__(None, None, self.a, self.b)
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.a == other.a and self.b == other.b
 
     def __ne__(self, other):
         return not (self == other)
-
-
-# def on_curve(x, y):
-#     return y**2 == x**3 + a*x + b
 
 
 prime = 223
@@ -124,6 +135,9 @@ y1 = FieldElement(105, prime)
 # x2 = FieldElement(17, prime)
 # y2 = FieldElement(56, prime)
 
+
 p1 = Point(x1, y1, a, b)
-# p2 = Point(x2, y2, a, b)
+
 print(p1 + p1)
+
+# p2 = Point(x2, y2, a, b)
