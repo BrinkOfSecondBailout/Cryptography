@@ -144,8 +144,4 @@ def scalar_mul(x, y, times):
         print('{}*(x,y) = ({}, {})'.format(s, result.x.num, result.y.num))
 
 
-def find_order(point, times):
-    print(times * point)
-
-
-find_order(p1, times)
+print(7 * p1)
