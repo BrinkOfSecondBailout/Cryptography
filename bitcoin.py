@@ -138,10 +138,10 @@ p1 = Point(x1, y1, a, b)
 times = 7
 
 
-def scalar_mul(x, y, times):
-    for s in range(1, times):
-        result = s * p1
-        print('{}*(x,y) = ({}, {})'.format(s, result.x.num, result.y.num))
+# def scalar_mul(x, y, times):
+#     for s in range(1, times):
+#         result = s * p1
+#         print('{}*(x,y) = ({}, {})'.format(s, result.x.num, result.y.num))
 
 
 print(7 * p1)
