@@ -144,8 +144,10 @@ def scalar_mul(x, y, times):
         print('{}*(x,y) = ({}, {})'.format(s, result.x.num, result.y.num))
 
 
-
-
+gx = 0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798
+gy = 0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8
+p = 2**256 - 2**32 - 977
+print(gy**2 % p == (gx**3 + 7) % p)
 
 
 class S256Field(FieldElement):
@@ -158,6 +160,7 @@ class S256Field(FieldElement):
 
 A = 0
 B = 7
+
 
 class S256Point(Point):
     def __init__(self, x, y, a=None, b=None):
