@@ -151,6 +151,14 @@ def scalar_mul(x, y, times):
 # G = Point(x, y, zero, seven)
 # print(n*G)
 
+class Signature:
+    def __init__(self, r, s):
+        self.r = r
+        self.s = s
+
+    def __repr__(self):
+        return 'Signature({:x}, {:x})'.format(self.r, self.s)
+
 
 class S256Field(FieldElement):
     def __init__(self, num, prime=None):
@@ -172,6 +180,13 @@ class S256Point(Point):
         coef = coefficient % N
         return super().__rmul__(coef)
 
+    def verify(self, z, sig):
+        s_inv = pow(sig.s, N - 2, N)
+        u = z * s_inv % N
+        v = sig.r * s_inv % N
+        total = u * G + v * self
+        return total.x.num == sig.r
+
 
 A = 0
 B = 7
@@ -192,7 +207,10 @@ r = 0xac8d1c87e51d0d441be8b3dd5b05c8795b48875dffe00b7ffcfac23010d3a395
 s = 0x68342ceff8935ededd102dd876ffd6ba72d6a427a3edb13d26eb0781cb423c4
 
 point = S256Point(px, py)
-s_inv = pow(s, N-2, N)
-u = z * s_inv % N
-v = r * s_inv % N
-print((u*G + v*point).x.num == r)
+sig = Signature(r, s)
+print(point.verify(z, sig))
+
+# s_inv = pow(s, N-2, N)
+# u = z * s_inv % N
+# v = r * s_inv % N
+# print((u*G + v*point).x.num == r)
