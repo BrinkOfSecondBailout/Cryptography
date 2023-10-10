@@ -210,7 +210,7 @@ point = S256Point(px, py)
 sig = Signature(r, s)
 print(point.verify(z, sig))
 
-s_inv = pow(s, N-2, N)
-u = z * s_inv % N
-v = r * s_inv % N
-print((u*G + v*point).x.num == r)
+# s_inv = pow(s, N-2, N)
+# u = z * s_inv % N
+# v = r * s_inv % N
+# print((u*G + v*point).x.num == r)
