@@ -197,20 +197,20 @@ G = S256Point(
     0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8)
 
 
-# print(N*G)
+print(N*G)
 
 
-# px = 0x887387e452b8eacc4acfde10d9aaf7f6d9a0f975aabb10d006e4da568744d06c
-# py = 0x61de6d95231cd89026e286df3b6ae4a894a3378e393e93a0f45b666329a0ae34
-# z = 0xec208baa0fc1c19f708a9ca96fdeff3ac3f230bb4a7ba4aede4942ad003c0f60
-# r = 0xac8d1c87e51d0d441be8b3dd5b05c8795b48875dffe00b7ffcfac23010d3a395
-# s = 0x68342ceff8935ededd102dd876ffd6ba72d6a427a3edb13d26eb0781cb423c4
+px = 0x887387e452b8eacc4acfde10d9aaf7f6d9a0f975aabb10d006e4da568744d06c
+py = 0x61de6d95231cd89026e286df3b6ae4a894a3378e393e93a0f45b666329a0ae34
+z = 0xec208baa0fc1c19f708a9ca96fdeff3ac3f230bb4a7ba4aede4942ad003c0f60
+r = 0xac8d1c87e51d0d441be8b3dd5b05c8795b48875dffe00b7ffcfac23010d3a395
+s = 0x68342ceff8935ededd102dd876ffd6ba72d6a427a3edb13d26eb0781cb423c4
 
-# point = S256Point(px, py)
-# sig = Signature(r, s)
-# print(point.verify(z, sig))
+point = S256Point(px, py)
+sig = Signature(r, s)
+print(point.verify(z, sig))
 
-# s_inv = pow(s, N-2, N)
-# u = z * s_inv % N
-# v = r * s_inv % N
-# print((u*G + v*point).x.num == r)
+s_inv = pow(s, N-2, N)
+u = z * s_inv % N
+v = r * s_inv % N
+print((u*G + v*point).x.num == r)
